@@ -179,6 +179,13 @@
       background-color: rgba(255, 255, 255, 0.08);
     }
 
+    .app-hint {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
     .footer-note {
       margin-top: 24px;
       padding-top: 20px;
@@ -229,14 +236,17 @@
 
     <!-- Actions -->
     <div id="actionContainer" style="display: none;">
-      <a id="openAppBtn" href="rehnuma://auth/callback" class="btn">
+      <a id="openAppBtn" href="rehnuma://" class="btn">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
           <polyline points="15 3 21 3 21 9"></polyline>
           <line x1="10" y1="14" x2="21" y2="3"></line>
         </svg>
-        Open Rehnuma App
+        Return to Rehnuma and Log In
       </a>
+      <p id="appHint" class="app-hint">
+        If using Expo Go or if your device does not open the app directly, switch back to <strong>Rehnuma</strong> to log in.
+      </p>
     </div>
 
     <div class="footer-note">
@@ -284,16 +294,7 @@
         statusDescription.textContent = 'Return to Rehnuma and log in.';
         actionContainer.style.display = 'block';
         openAppBtn.textContent = 'Return to Rehnuma and Log In';
-        const targetUrl = 'rehnuma://auth/callback' + (window.location.hash || '');
-        openAppBtn.setAttribute('href', targetUrl);
-
-        // Attempt automatic deep link if opened on a mobile device
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-          setTimeout(function() {
-            window.location.href = targetUrl;
-          }, 1500);
-        }
+        openAppBtn.setAttribute('href', 'rehnuma://');
       }
 
       // Render Error / Expired State
@@ -309,7 +310,8 @@
         statusTitle.textContent = 'Verification Link Expired or Invalid';
         statusDescription.textContent = message || 'This confirmation link has already been used or has expired. If you have already verified your email, please return to Rehnuma and log in.';
         actionContainer.style.display = 'block';
-        openAppBtn.textContent = 'Return to Rehnuma App';
+        openAppBtn.textContent = 'Return to Rehnuma and Log In';
+        openAppBtn.setAttribute('href', 'rehnuma://');
       }
 
       // Evaluate result
