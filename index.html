@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rehnuma — Email Verification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #12130F;
+      --bg-surface: #1E2019;
+      --bg-surface-elevated: #282B22;
+      --text-primary: #F4F4EE;
+      --text-secondary: #A6A99B;
+      --text-tertiary: #717467;
+      --primary: #E58517;
+      --primary-hover: #F99624;
+      --primary-subtle: rgba(229, 133, 23, 0.15);
+      --success: #22C55E;
+      --success-subtle: rgba(34, 197, 94, 0.15);
+      --error: #EF4444;
+      --error-subtle: rgba(239, 68, 68, 0.15);
+      --border: rgba(255, 255, 255, 0.08);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 460px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .logo-badge {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-full);
+      background-color: var(--bg-surface-elevated);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .logo-badge svg {
+      width: 38px;
+      height: 38px;
+      color: var(--primary);
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+    }
+
+    .brand-tagline {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .status-icon-wrapper {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-full);
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .status-icon-wrapper.success {
+      background-color: var(--success-subtle);
+      border: 1.5px solid rgba(34, 197, 94, 0.3);
+      color: var(--success);
+    }
+
+    .status-icon-wrapper.error {
+      background-color: var(--error-subtle);
+      border: 1.5px solid rgba(239, 68, 68, 0.3);
+      color: var(--error);
+    }
+
+    .status-icon-wrapper.loading {
+      background-color: var(--primary-subtle);
+      border: 1.5px solid rgba(229, 133, 23, 0.3);
+      color: var(--primary);
+    }
+
+    .heading {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px 24px;
+      background-color: var(--primary);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn:active {
+      transform: scale(0.99);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-surface-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(229, 133, 23, 0.2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="brand">
+      <div class="logo-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M12 8v4"/>
+          <path d="M12 16h.01"/>
+        </svg>
+      </div>
+      <h1 class="brand-title">REHNUMA</h1>
+      <p class="brand-tagline">Your guide to the help you need.</p>
+    </div>
+
+    <!-- Status Icon -->
+    <div id="statusIcon" class="status-icon-wrapper loading">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Title and Description -->
+    <h2 id="statusTitle" class="heading">Verifying your email...</h2>
+    <p id="statusDescription" class="description">
+      Please wait while we confirm your account details with Rehnuma.
+    </p>
+
+    <!-- Actions -->
+    <div id="actionContainer" style="display: none;">
+      <a id="openAppBtn" href="rehnuma://auth/callback" class="btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        Open Rehnuma App
+      </a>
+    </div>
+
+    <div class="footer-note">
+      MADE TO GUIDE YOU &bull; TRAVEL & EMERGENCY COMPANION
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const statusIcon = document.getElementById('statusIcon');
+      const statusTitle = document.getElementById('statusTitle');
+      const statusDescription = document.getElementById('statusDescription');
+      const actionContainer = document.getElementById('actionContainer');
+      const openAppBtn = document.getElementById('openAppBtn');
+
+      // Helper to parse query and hash parameters
+      function parseParams() {
+        const params = new URLSearchParams(window.location.search);
+        if (window.location.hash) {
+          const hashString = window.location.hash.substring(1);
+          const hashParams = new URLSearchParams(hashString);
+          for (const [key, value] of hashParams.entries()) {
+            params.set(key, value);
+          }
+        }
+        return params;
+      }
+
+      const params = parseParams();
+      const error = params.get('error') || params.get('error_code');
+      const errorDescription = params.get('error_description');
+      const accessToken = params.get('access_token');
+      const type = params.get('type');
+
+      // Render Success State
+      function renderSuccess() {
+        statusIcon.className = 'status-icon-wrapper success';
+        statusIcon.innerHTML = `
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        `;
+        statusTitle.textContent = 'Email verified successfully.';
+        statusDescription.textContent = 'Return to Rehnuma and log in.';
+        actionContainer.style.display = 'block';
+        openAppBtn.textContent = 'Return to Rehnuma and Log In';
+        const targetUrl = 'rehnuma://auth/callback' + (window.location.hash || '');
+        openAppBtn.setAttribute('href', targetUrl);
+
+        // Attempt automatic deep link if opened on a mobile device
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          setTimeout(function() {
+            window.location.href = targetUrl;
+          }, 1500);
+        }
+      }
+
+      // Render Error / Expired State
+      function renderError(message) {
+        statusIcon.className = 'status-icon-wrapper error';
+        statusIcon.innerHTML = `
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        `;
+        statusTitle.textContent = 'Verification Link Expired or Invalid';
+        statusDescription.textContent = message || 'This confirmation link has already been used or has expired. If you have already verified your email, please return to Rehnuma and log in.';
+        actionContainer.style.display = 'block';
+        openAppBtn.textContent = 'Return to Rehnuma App';
+      }
+
+      // Evaluate result
+      if (error) {
+        if (error === 'access_denied' || error === 'otp_expired') {
+          renderError('This verification link has expired or has already been used. If your account is already confirmed, open Rehnuma to log in.');
+        } else {
+          renderError(errorDescription || 'Unable to confirm your email verification link.');
+        }
+      } else {
+        // If there's an access token or type === 'signup' or query has no error
+        renderSuccess();
+      }
+    })();
+  </script>
+</body>
+</html>
